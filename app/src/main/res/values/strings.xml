@@ -6,4 +6,6 @@
     <string name="save_menu">save</string>
     <string name="txt_location">location</string>
     <string name="name_hint">Name</string>
+    <string name="delete_deal">Delete Deal</string>
+    <string name="delete_art_place">Delete Art Place</string>
 </resources>

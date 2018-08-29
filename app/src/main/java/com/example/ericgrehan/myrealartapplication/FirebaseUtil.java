@@ -21,9 +21,9 @@ public class FirebaseUtil {
         {
             firebaseUtil = new FirebaseUtil();
             mFirebaseDatabase =  FirebaseDatabase.getInstance();
-            martPlaces =  new ArrayList<ArtPlace>();
-        }
 
+        }
+        martPlaces =  new ArrayList<ArtPlace>();
         mdatabaseReference =  mFirebaseDatabase.getReference().child(ref);
 
     }

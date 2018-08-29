@@ -56,6 +56,12 @@ public class ArtActivity extends AppCompatActivity {
                 saveArtPlace();
                 Toast.makeText(this,"Item Added",Toast.LENGTH_LONG).show();
                 clean();
+                backToList();
+                return true;
+            case R.id.delete_menu:
+                deleteArtPlace();
+                Toast.makeText(this,"Art Place Deleted", Toast.LENGTH_LONG).show();
+                backToList();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -74,6 +80,22 @@ public class ArtActivity extends AppCompatActivity {
             mDatabaseReference.child(artPlace.getId()).setValue(artPlace);
         }
         //mDatabaseReference.push().setValue(artPlace); //Take Strings from each editText, Call an Instance of our Art Place Class, push to the DB with our instance
+    }
+
+    private void deleteArtPlace()
+    {
+        if(artPlace == null)
+        {
+            Toast.makeText(this,"Please save the deal before deleting", Toast.LENGTH_LONG).show();
+            return;
+        }
+        mDatabaseReference.child(artPlace.getId()).removeValue();
+    }
+
+    private void backToList()
+    {
+        Intent intent =  new Intent(this, ListActivity.class);
+        startActivity(intent);
     }
 
     //Clear all EditTexts once Item is sent to DB
