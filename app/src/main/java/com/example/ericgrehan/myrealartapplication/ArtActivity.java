@@ -1,5 +1,6 @@
 package com.example.ericgrehan.myrealartapplication;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -20,6 +21,7 @@ public class ArtActivity extends AppCompatActivity {
     EditText txtName;
     EditText txtLocation;
     EditText txtDescription;
+    ArtPlace artPlace;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,10 +31,20 @@ public class ArtActivity extends AppCompatActivity {
         FirebaseUtil.openFBReference("artitems");
         mFirebaseDatabase = FirebaseUtil.mFirebaseDatabase;
         mDatabaseReference = FirebaseUtil.mdatabaseReference;
-
         txtName = (EditText) findViewById(R.id.editText);
         txtLocation = (EditText) findViewById(R.id.editLocation);
         txtDescription = (EditText) findViewById(R.id.txtDescription);
+        Intent intent = getIntent(); //Get the Intent from Item clicked in viewholder
+        ArtPlace artPlace = (ArtPlace) intent.getSerializableExtra("ArtPlace");
+        //this will then pre-populate our fields with the item that we have clicked in our list
+        if(artPlace == null){
+            artPlace = new ArtPlace();
+        }
+        //Sets the TextViews to our list Items
+        this.artPlace = artPlace;
+        txtName.setText(artPlace.getName());
+        txtLocation.setText(artPlace.getLocation());
+        txtDescription.setText(artPlace.getDescription());
     }
 
     //What Happens when the save button is Hit//
@@ -52,11 +64,16 @@ public class ArtActivity extends AppCompatActivity {
 
     //How the item Is Saved
     private void saveArtPlace() {
-        String name =  txtName.getText().toString();
-        String location =  txtLocation.getText().toString();
-        String description =  txtDescription.getText().toString();
-        ArtPlace artPlace = new ArtPlace(name, location, description,"");
-        mDatabaseReference.push().setValue(artPlace); //Take Strings from each editText, Call an Instance of our Art Place Class, push to the DB with our instance
+        artPlace.setName(txtName.getText().toString());
+        artPlace.setLocation(txtLocation.getText().toString());
+        artPlace.setDescription(txtDescription.getText().toString());
+        if(artPlace.getId() == null){
+            mDatabaseReference.push().setValue(artPlace);
+        }
+        else {
+            mDatabaseReference.child(artPlace.getId()).setValue(artPlace);
+        }
+        //mDatabaseReference.push().setValue(artPlace); //Take Strings from each editText, Call an Instance of our Art Place Class, push to the DB with our instance
     }
 
     //Clear all EditTexts once Item is sent to DB

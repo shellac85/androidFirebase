@@ -1,6 +1,8 @@
 package com.example.ericgrehan.myrealartapplication;
 
-public class ArtPlace {
+import java.io.Serializable;
+
+public class ArtPlace implements Serializable {
     private String id;
     private String name;
     private String location;

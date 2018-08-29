@@ -1,6 +1,7 @@
 package com.example.ericgrehan.myrealartapplication;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
@@ -9,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -88,7 +90,7 @@ public class ArtAdapter extends RecyclerView.Adapter<ArtAdapter.ArtViewHolder> {
     }
 
     //ViewHolder - -- - extends the Recycler View
-    public class ArtViewHolder extends RecyclerView.ViewHolder
+    public class ArtViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener
     {
         TextView tvTitle;
         TextView tvDescription;
@@ -100,15 +102,26 @@ public class ArtAdapter extends RecyclerView.Adapter<ArtAdapter.ArtViewHolder> {
             tvTitle = (TextView) itemView.findViewById(R.id.tvTitle);
             tvDescription = (TextView) itemView.findViewById(R.id.tvDescription);
             tvPrice = (TextView) itemView.findViewById(R.id.tvPrice);
+            itemView.setOnClickListener(this);
         }
 
-        //Viewholder needs to bind the data to our layout of our row
+        //ViewHolder needs to bind the data to our layout of our row
         public void bind(ArtPlace place)
         {
             tvTitle.setText(place.getName()); //Takes an Art Place as a parameter and puts it into the TextView set above in the constructor
             tvDescription.setText(place.getLocation());
             tvPrice.setText(place.getDescription());
 
+        }
+        //This is to let us know which list item is clicked and then do something with that
+        @Override
+        public void onClick(View v) {
+            int position = getAdapterPosition();
+            Log.d("Click", String.valueOf(position));
+            ArtPlace selectedArtPlace = artPlaces.get(position);
+            Intent intent =  new Intent(itemView.getContext(), ArtActivity.class);          //New Intent, send the selectedArtPlace
+            intent.putExtra("ArtPlace", selectedArtPlace);                           //
+            itemView.getContext().startActivity(intent);                                   //Start activity with this Intent then go to ArtActivity
         }
     }
 
