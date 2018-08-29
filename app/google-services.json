@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "659597133648",
+    "firebase_url": "https://myrealartapp.firebaseio.com",
+    "project_id": "myrealartapp",
+    "storage_bucket": "myrealartapp.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:659597133648:android:6e208593e0760ad9",
+        "android_client_info": {
+          "package_name": "com.example.ericgrehan.myrealartapplication"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "659597133648-hm101absqche0o04rub9ll2s74gc8ot6.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.ericgrehan.myrealartapplication",
+            "certificate_hash": "f7cdb3c77853d17d5c1e1a21b70f4c0684821d73"
+          }
+        },
+        {
+          "client_id": "659597133648-hjv6a6d47kgcco5kmg81o4pku8fdktd8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCbhzX1ZLW-MwepGLYTEIp6g9DyHiiURK8"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "659597133648-hjv6a6d47kgcco5kmg81o4pku8fdktd8.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
