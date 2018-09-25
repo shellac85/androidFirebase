@@ -9,6 +9,7 @@ import android.view.MenuItem;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -28,14 +29,17 @@ public class ArtActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_insert);
         //Firebase Instance
-        FirebaseUtil.openFBReference("artitems");
+        //FirebaseUtil.openFBReference(,); //("artitems",this);
         mFirebaseDatabase = FirebaseUtil.mFirebaseDatabase;
         mDatabaseReference = FirebaseUtil.mdatabaseReference;
+        //
         txtName = (EditText) findViewById(R.id.editText);
         txtLocation = (EditText) findViewById(R.id.editLocation);
         txtDescription = (EditText) findViewById(R.id.txtDescription);
+        //intent
         Intent intent = getIntent(); //Get the Intent from Item clicked in viewholder
         ArtPlace artPlace = (ArtPlace) intent.getSerializableExtra("ArtPlace");
+
         //this will then pre-populate our fields with the item that we have clicked in our list
         if(artPlace == null){
             artPlace = new ArtPlace();
@@ -110,6 +114,24 @@ public class ArtActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater =  getMenuInflater();
         inflater.inflate(R.menu.save_menu, menu);
+        if(FirebaseUtil.isAdmin){
+            menu.findItem(R.id.delete_menu).setVisible(true);
+            menu.findItem(R.id.save_menu).setVisible(true);
+            //menu.findItem(R.id.insert_menu).setVisible(true);
+            enableEditTexts(true);
+        }
+        else{
+            menu.findItem(R.id.delete_menu).setVisible(false);
+            menu.findItem(R.id.save_menu).setVisible(false);
+            //menu.findItem(R.id.insert_menu).setVisible(false);
+            enableEditTexts(false);
+        }
         return true;
+    }
+
+    private void enableEditTexts(boolean isEnabled) {
+        txtName.setEnabled(isEnabled);
+        txtLocation.setEnabled(isEnabled);
+        txtDescription.setEnabled(isEnabled);
     }
 }

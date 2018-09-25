@@ -22,7 +22,7 @@ import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 
-
+//look back into the setup of this
 public class ArtAdapter extends RecyclerView.Adapter<ArtAdapter.ArtViewHolder> { //ArtViewHolder here is the ViewHolder we created at the bottom of this class
 
     ArrayList<ArtPlace> artPlaces;
@@ -31,10 +31,10 @@ public class ArtAdapter extends RecyclerView.Adapter<ArtAdapter.ArtViewHolder> {
     private ChildEventListener mChildListner;
 
     public ArtAdapter(){
-        FirebaseUtil.openFBReference("artitems");
+        //FirebaseUtil.openFBReference("artitems",this);
         mFirebaseDatabase = FirebaseUtil.mFirebaseDatabase;
         mDatabaseReference = FirebaseUtil.mdatabaseReference;
-        artPlaces = FirebaseUtil.martPlaces;
+        this.artPlaces = FirebaseUtil.martPlaces;
         mChildListner = new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
@@ -119,9 +119,9 @@ public class ArtAdapter extends RecyclerView.Adapter<ArtAdapter.ArtViewHolder> {
             int position = getAdapterPosition();
             Log.d("Click", String.valueOf(position));
             ArtPlace selectedArtPlace = artPlaces.get(position);
-            Intent intent =  new Intent(itemView.getContext(), ArtActivity.class);          //New Intent, send the selectedArtPlace
-            intent.putExtra("ArtPlace", selectedArtPlace);                           //
-            itemView.getContext().startActivity(intent);                                   //Start activity with this Intent then go to ArtActivity
+            Intent intent =  new Intent(itemView.getContext(), ArtActivity.class);              //New Intent, send the selectedArtPlace
+            intent.putExtra("ArtPlace", selectedArtPlace);
+            v.getContext().startActivity(intent);                                               //Start activity with this Intent then go to ArtActivity
         }
     }
 
