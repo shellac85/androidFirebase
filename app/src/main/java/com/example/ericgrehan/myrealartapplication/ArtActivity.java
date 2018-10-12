@@ -1,18 +1,27 @@
 package com.example.ericgrehan.myrealartapplication;
 
 import android.content.Intent;
+import android.net.Uri;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
+    //Main Entry of app
 public class ArtActivity extends AppCompatActivity {
 
     //Firebase Initialisation
@@ -23,11 +32,13 @@ public class ArtActivity extends AppCompatActivity {
     EditText txtLocation;
     EditText txtDescription;
     ArtPlace artPlace;
+    private static final int PICTURE_RESULT = 42;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_insert);
+
         //Firebase Instance
         //FirebaseUtil.openFBReference(,); //("artitems",this);
         mFirebaseDatabase = FirebaseUtil.mFirebaseDatabase;
@@ -49,6 +60,16 @@ public class ArtActivity extends AppCompatActivity {
         txtName.setText(artPlace.getName());
         txtLocation.setText(artPlace.getLocation());
         txtDescription.setText(artPlace.getDescription());
+        Button btnImage = findViewById(R.id.btnImage);
+        btnImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent =  new Intent(Intent.ACTION_GET_CONTENT);
+                intent.setType("image/jpeg");
+                intent.putExtra(Intent.EXTRA_LOCAL_ONLY, true);
+                startActivityForResult(intent.createChooser(intent,"Insert Picture"),PICTURE_RESULT);
+            }
+        });
     }
 
     //What Happens when the save button is Hit//
@@ -127,6 +148,24 @@ public class ArtActivity extends AppCompatActivity {
             enableEditTexts(false);
         }
         return true;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == PICTURE_RESULT && resultCode == RESULT_OK){
+            Uri imageUri = data.getData();
+
+            StorageReference ref = FirebaseUtil.mStorageRef.child(imageUri.getLastPathSegment());
+
+            ref.putFile(imageUri).addOnSuccessListener(this, new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                    String url = taskSnapshot.getStorage().getDownloadUrl().toString();
+                    artPlace.setImgurl(url);
+                }
+            });
+        }
     }
 
     private void enableEditTexts(boolean isEnabled) {

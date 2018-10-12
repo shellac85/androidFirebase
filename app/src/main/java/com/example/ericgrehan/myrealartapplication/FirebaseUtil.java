@@ -14,6 +14,8 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -27,6 +29,8 @@ public class FirebaseUtil {
     public static DatabaseReference mdatabaseReference;
     private static FirebaseUtil firebaseUtil;
     public static FirebaseAuth mFirebaseAuth;
+    public static FirebaseStorage mStorage;
+    public static StorageReference mStorageRef;
     public static FirebaseAuth.AuthStateListener mAuthListner;
     public static ArrayList<ArtPlace> martPlaces;
     private static ListActivity caller;
@@ -51,10 +55,12 @@ public class FirebaseUtil {
                     else{
                         String userId = firebaseAuth.getUid();
                         checkAdmin(userId);
-                        Toast.makeText(callerActivity.getBaseContext(),"Welcome Back", Toast.LENGTH_LONG).show();
                     }
+                    Toast.makeText(callerActivity.getBaseContext(),"Welcome Back", Toast.LENGTH_LONG).show();
+
                 }
             };
+            connectStrorage();
         }
         martPlaces =  new ArrayList<ArtPlace>();
         mdatabaseReference =  mFirebaseDatabase.getReference().child(ref);
@@ -123,6 +129,11 @@ public class FirebaseUtil {
 
     public static void detachListner() {
         mFirebaseAuth.removeAuthStateListener(mAuthListner);
+    }
+
+    public static void connectStrorage(){
+        mStorage = FirebaseStorage.getInstance();
+        mStorageRef = mStorage.getReference().child("art_pictures");
     }
 
 
