@@ -23,7 +23,7 @@ import com.google.firebase.storage.UploadTask;
 
     //Main Entry of app
 public class ArtActivity extends AppCompatActivity {
-    //test comment
+    
     //Firebase Initialisation
     private FirebaseDatabase mFirebaseDatabase;
     private DatabaseReference mDatabaseReference;
