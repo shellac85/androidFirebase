@@ -8,4 +8,5 @@
     <string name="name_hint">Name</string>
     <string name="delete_deal">Delete Deal</string>
     <string name="delete_art_place">Delete Art Place</string>
+    <string name="title_activity_maps">Map</string>
 </resources>

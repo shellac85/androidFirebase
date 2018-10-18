@@ -1,8 +1,12 @@
 package com.example.ericgrehan.myrealartapplication;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.res.Resources;
 import android.net.Uri;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -12,6 +16,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -20,8 +25,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.squareup.picasso.Picasso;
 
-    //Main Entry of app
+//Main Entry of app
 public class ArtActivity extends AppCompatActivity {
     //Test comment
     //Firebase Initialisation
@@ -31,6 +37,8 @@ public class ArtActivity extends AppCompatActivity {
     EditText txtName;
     EditText txtLocation;
     EditText txtDescription;
+    ImageView imageView;
+    Button btnMap;
     ArtPlace artPlace;
     private static final int PICTURE_RESULT = 42;
 
@@ -39,14 +47,27 @@ public class ArtActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_insert);
 
+
+
         //Firebase Instance
         //FirebaseUtil.openFBReference(,); //("artitems",this);
         mFirebaseDatabase = FirebaseUtil.mFirebaseDatabase;
         mDatabaseReference = FirebaseUtil.mdatabaseReference;
         //
-        txtName = (EditText) findViewById(R.id.editText);
-        txtLocation = (EditText) findViewById(R.id.editLocation);
-        txtDescription = (EditText) findViewById(R.id.txtDescription);
+        txtName = findViewById(R.id.editText);
+        txtLocation = findViewById(R.id.editLocation);
+        txtDescription = findViewById(R.id.txtDescription);
+        imageView = findViewById(R.id.image);
+        btnMap = findViewById(R.id.buttonMap);
+
+        btnMap.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), MapsActivity.class);
+                startActivity(intent);
+            }
+        });
+
         //intent
         Intent intent = getIntent(); //Get the Intent from Item clicked in viewholder
         ArtPlace artPlace = (ArtPlace) intent.getSerializableExtra("ArtPlace");
@@ -60,6 +81,7 @@ public class ArtActivity extends AppCompatActivity {
         txtName.setText(artPlace.getName());
         txtLocation.setText(artPlace.getLocation());
         txtDescription.setText(artPlace.getDescription());
+        showImage(artPlace.getImgurl());
         Button btnImage = findViewById(R.id.btnImage);
         btnImage.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -163,6 +185,7 @@ public class ArtActivity extends AppCompatActivity {
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                     String url = taskSnapshot.getStorage().getDownloadUrl().toString();
                     artPlace.setImgurl(url);
+                    showImage(url);
                 }
             });
         }
@@ -172,5 +195,18 @@ public class ArtActivity extends AppCompatActivity {
         txtName.setEnabled(isEnabled);
         txtLocation.setEnabled(isEnabled);
         txtDescription.setEnabled(isEnabled);
+    }
+
+    private void showImage(String url){
+        if(url != null && url.isEmpty() ==false){
+//            if (ActivityCompat.checkSelfPermission(this,  android.Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                int width = Resources.getSystem().getDisplayMetrics().widthPixels;
+                Picasso.get()
+                        .load(url)
+                        .resize(width, width * 2 / 3)
+                        .centerCrop()
+                        .into(imageView);
+
+        }
     }
 }

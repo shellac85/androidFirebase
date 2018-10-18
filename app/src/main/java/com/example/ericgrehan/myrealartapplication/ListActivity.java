@@ -2,6 +2,7 @@ package com.example.ericgrehan.myrealartapplication;
 
 import android.content.Intent;
 import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -27,6 +28,9 @@ public class ListActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list);
+
+        //Check Location Permission
+        //ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION );
     }
 
     //This method opens the option to Add a new art place at the top of the app
